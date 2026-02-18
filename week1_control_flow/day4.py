@@ -1,4 +1,3 @@
-
 contador = 0
 while True:
     try:
