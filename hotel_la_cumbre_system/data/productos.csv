@@ -1,0 +1,4 @@
+id,nombre,unidad_base,precio_venta_actual,activo
+ARROZ1KG,Arroz 1kg,unidad,12.0,True
+AZUCAR1KG,Azucar 1kg,unidad,11.0,True
+CAFE250G,Cafe 250g,unidad,8.5,True
