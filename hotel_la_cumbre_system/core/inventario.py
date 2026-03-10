@@ -50,17 +50,62 @@ def reconstruir_stock(producto_id):
 
     return stock
 
-
-if __name__ == "__main__":
+def calcular_estado_producto(producto_id):
 
     transacciones = cargar_transacciones()
 
-    print("Transacciones cargadas:")
+    stock = 0
+    costo_promedio = 0
+    costo_total_ventas = 0
+
     for t in transacciones:
-        print(t)
 
-    print("\nStock COCA2L:")
+        if t["producto_id"] != producto_id:
+            continue
 
-    stock = reconstruir_stock("COCA2L")
+        tipo = t["tipo"]
+        cantidad = t["cantidad"]
+        precio = t["precio_unitario"]
 
-    print(stock)
+        if tipo == "COMPRA":
+
+            valor_actual = stock * costo_promedio
+            valor_compra = cantidad * precio
+
+            nuevo_stock = stock + cantidad
+
+            if nuevo_stock > 0:
+                costo_promedio = (valor_actual + valor_compra) / nuevo_stock
+
+            stock = nuevo_stock
+
+
+        elif tipo == "VENTA":
+
+            costo_venta = cantidad * costo_promedio
+            costo_total_ventas += costo_venta
+
+            stock -= cantidad
+
+
+        elif tipo == "MERMA":
+
+            stock -= cantidad
+
+
+    valor_inventario = stock * costo_promedio
+
+    return {
+        "producto_id": producto_id,
+        "stock": stock,
+        "costo_promedio": costo_promedio,
+        "valor_inventario": valor_inventario,
+        "costo_total_ventas": costo_total_ventas
+    }
+
+
+if __name__ == "__main__":
+
+    estado = calcular_estado_producto("COCA2L")
+
+    print(estado)
