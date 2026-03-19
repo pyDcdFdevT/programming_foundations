@@ -1,5 +1,6 @@
 import csv
 import os
+from .productos import cargar_productos
 
 
 def cargar_transacciones():
@@ -50,9 +51,7 @@ def reconstruir_stock(producto_id):
 
     return stock
 
-def calcular_estado_producto(producto_id):
-
-    transacciones = cargar_transacciones()
+def calcular_estado_producto(producto_id, transacciones):
 
     stock = 0
     costo_promedio = 0
@@ -103,9 +102,23 @@ def calcular_estado_producto(producto_id):
         "costo_total_ventas": costo_total_ventas
     }
 
+def calcular_estado_todos_productos():
+    
+    productos = cargar_productos()
+    estados = {}
+    transacciones = cargar_transacciones()
+    
+    for producto_id in productos:
+        estado = calcular_estado_producto(producto_id, transacciones)
+        
+        estados[producto_id] = estado
+    return estados
 
 if __name__ == "__main__":
 
-    estado = calcular_estado_producto("COCA2L")
-
-    print(estado)
+    estados = calcular_estado_todos_productos()
+    
+    for producto_id, estado in estados.items():
+        print(f"\nProducto: {producto_id}")
+        for clave, valor in estado.items():
+            print(f"  {clave}: {valor}")
