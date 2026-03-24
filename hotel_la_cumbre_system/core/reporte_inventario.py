@@ -7,10 +7,11 @@ def mostrar_reporte():
     
     for producto_id, estado in estados.items():
         print(f"\nProducto: {producto_id}")
-        print(f"Stock: {estado['stock']}")
-        print(f"Costo promedio: {estado['costo_promedio']}")
-        print(f"Valor inventario: {estado['valor_inventario']}")
-        print(f"Costo total ventas: {estado['costo_total_ventas']}")
+        print(f"Stock: {estado['stock']:.2f}")
+        print(f"Costo promedio: {estado['costo_promedio']:.2f}")
+        print(f"Valor inventario: {estado['valor_inventario']:.2f}")
+        print(f"Costo total ventas: {estado['costo_total_ventas']:.2f}")
+        print("-" * 30)
 
 if __name__ == "__main__":
     mostrar_reporte()
