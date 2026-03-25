@@ -3,6 +3,8 @@ from .inventario import calcular_estado_todos_productos
 def mostrar_reporte():
     estados = calcular_estado_todos_productos()
     
+    total_inventario = 0
+    
     print("\n--- REPORTE DE INVENTARIO ---")
     
     for producto_id, estado in estados.items():
@@ -12,6 +14,11 @@ def mostrar_reporte():
         print(f"Valor inventario: {estado['valor_inventario']:.2f}")
         print(f"Costo total ventas: {estado['costo_total_ventas']:.2f}")
         print("-" * 30)
+        
+        total_inventario += estado["valor_inventario"]
+    
+    print("\nTOTAL INVENTARIO:")
+    print(f"{total_inventario:.2f}")    
 
 if __name__ == "__main__":
     mostrar_reporte()
