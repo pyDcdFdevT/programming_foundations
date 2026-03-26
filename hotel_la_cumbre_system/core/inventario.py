@@ -114,6 +114,18 @@ def calcular_estado_todos_productos():
         estados[producto_id] = estado
     return estados
 
+def validar_stock(producto_id, cantidad):
+    
+    if cantidad <= 0:
+        return False
+    
+    stock_actual = reconstruir_stock(producto_id)
+    
+    if cantidad > stock_actual:
+        return False
+    
+    return True
+
 if __name__ == "__main__":
 
     estados = calcular_estado_todos_productos()
@@ -122,3 +134,8 @@ if __name__ == "__main__":
         print(f"\nProducto: {producto_id}")
         for clave, valor in estado.items():
             print(f"  {clave}: {valor}")
+
+    print("\n--- PRUEBA VALIDACIÓN ---")
+    print("Venta 5 ARROZ1KG:", validar_stock("ARROZ1KG", 5))
+    print("Venta 100 ARROZ1KG:", validar_stock("ARROZ1KG", 100))
+    print("Venta 0 ARROZ1KG:", validar_stock("ARROZ1KG", 0))
