@@ -156,7 +156,8 @@ def registrar_venta(producto_id, cantidad):
             cantidad,
             0
         ])
-        
+
+
 
     
     print("Venta registrada.")
