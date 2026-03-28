@@ -126,6 +126,41 @@ def validar_stock(producto_id, cantidad):
     
     return True
 
+def registrar_venta(producto_id, cantidad):
+    
+    if not validar_stock(producto_id, cantidad):
+        print("No hay stock suficiente.")
+        return
+    
+    directorio_actual = os.path.dirname(__file__)
+    ruta_archivo = os.path.join(directorio_actual, "..", "data", "transacciones.csv")
+    
+    import datetime
+    
+    with open(ruta_archivo, "rb+") as f:
+        f.seek(0, os.SEEK_END)
+    
+    if f.tell() > 0:
+        f.seek(-1, os.SEEK_END)
+        ultimo = f.read(1)
+        
+        if ultimo != b"\n":
+            f.write(b"\n")
+    
+    with open(ruta_archivo, mode="a", newline="", encoding="utf-8") as archivo:
+        escritor = csv.writer(archivo)
+        escritor.writerow([
+            datetime.date.today(),
+            "VENTA",
+            producto_id,
+            cantidad,
+            0
+        ])
+        
+
+    
+    print("Venta registrada.")
+
 if __name__ == "__main__":
 
     estados = calcular_estado_todos_productos()
@@ -139,3 +174,6 @@ if __name__ == "__main__":
     print("Venta 5 ARROZ1KG:", validar_stock("ARROZ1KG", 5))
     print("Venta 100 ARROZ1KG:", validar_stock("ARROZ1KG", 100))
     print("Venta 0 ARROZ1KG:", validar_stock("ARROZ1KG", 0))
+    
+    print("\n--- PRUEBA VENTA ---")
+    registrar_venta("ARROZ1KG", 2)
