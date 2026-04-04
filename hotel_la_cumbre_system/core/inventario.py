@@ -140,12 +140,12 @@ def registrar_venta(producto_id, cantidad):
     with open(ruta_archivo, "rb+") as f:
         f.seek(0, os.SEEK_END)
     
-    if f.tell() > 0:
-        f.seek(-1, os.SEEK_END)
-        ultimo = f.read(1)
+        if f.tell() > 0:
+            f.seek(-1, os.SEEK_END)
+            ultimo = f.read(1)
         
-        if ultimo != b"\n":
-            f.write(b"\n")
+            if ultimo != b"\n":
+                f.write(b"\n")
     
     with open(ruta_archivo, mode="a", newline="", encoding="utf-8") as archivo:
         escritor = csv.writer(archivo)
@@ -157,10 +157,46 @@ def registrar_venta(producto_id, cantidad):
             0
         ])
 
+    print("Venta registrada.")
+    
+def registrar_compra(producto_id, cantidad, precio_unitario):
+    
+    if cantidad <= 0:
+        print("Cantidad inválida")
+        return
+    
+    if precio_unitario <= 0:
+        print("Precio inválido")
+        return
+    
+    directorio_actual = os.path.dirname(__file__)
+    ruta_archivo = os.path.join(directorio_actual, "..", "data", "transacciones.csv")
+    
+    import datetime
+    
+    with open(ruta_archivo, "rb+") as f:
+        f.seek(0, os.SEEK_END)
+    
+        if f.tell() > 0:
+            f.seek(-1, os.SEEK_END)
+            ultimo = f.read(1)
+        
+            if ultimo != b"\n":
+                f.write(b"\n")
+    
+    with open(ruta_archivo, mode="a", newline="", encoding="utf-8") as archivo:
+        escritor = csv.writer(archivo)
+        escritor.writerow([
+            datetime.date.today(),
+            "COMPRA",
+            producto_id,
+            cantidad,
+            precio_unitario
+        ])
 
+    print("Compra registrada.")
 
     
-    print("Venta registrada.")
 
 if __name__ == "__main__":
 
@@ -178,3 +214,14 @@ if __name__ == "__main__":
     
     print("\n--- PRUEBA VENTA ---")
     registrar_venta("ARROZ1KG", 2)
+    
+    print("\n--- PRUEBA COMPRA ---")
+    registrar_compra("ARROZ1KG", 10, 3)
+    
+    print("\n--- ESTADO DESPUÉS DE COMPRA ---")
+    estados = calcular_estado_todos_productos()
+
+    for producto_id, estado in estados.items():
+        print(f"\nProducto: {producto_id}")
+        for clave, valor in estado.items():
+            print(f"  {clave}: {valor}")
